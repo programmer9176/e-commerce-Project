@@ -3,6 +3,7 @@ import colors from "colors";
 import morgan from "morgan";
 import database from './db/database.js';
 import authRoutes from "./Routes/AuthRoutes.js";
+import categoryRoutes from "./Routes/CategoryRoute.js";
 import dotenv from "dotenv";
 import cors from "cors"
 
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 
 // Routes
 app.use("/", authRoutes);
+app.use("/", categoryRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8000;
