@@ -20,8 +20,8 @@ const Spinner = () => {
             <div style={{ minHeight: "100vh" }} className='text-cetner d-flex justify-content-center flex-column align-items-center'>
                 <div className='text-cetner'>
                     <h1>Redirecting to you in {count} seconds</h1>
-                    <div class="spinner-border text-cetner" role="status">
-                        <span class="sr-only"></span>
+                    <div className="spinner-border text-cetner" role="status">
+                        <span className="sr-only"></span>
                     </div>
                 </div>
 
