@@ -91,7 +91,7 @@ export const UpdateCategoryController = async (req, resp) => {
         const { id } = req.params;
         const { name } = req.body
 
-        const updateCategory = await CategoryModel.findByIdAndUpdate(id, { slug: slugify(name) }, { new: true });
+        const updateCategory = await CategoryModel.findByIdAndUpdate(id, { name, slug: slugify(name) }, { new: true });
         return resp.json({
             success: true,
             message: "Updated category",
@@ -117,6 +117,7 @@ export const DeleteCategoryController = async (req, resp) => {
         return resp.json({
             success: true,
             message: "Deleted category",
+            deleteCategory
         });
     } catch (error) {
         console.error(error);
