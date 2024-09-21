@@ -73,13 +73,21 @@ export const GetProductController = async (req, resp) => {
 
 export const GetSingleProductController = async (req, resp) => {
     try {
-        const { id } = req.params
+        const { slug } = req.params;
 
-        const singleProduct = await ProductModel.findOne({ _id: id }).select("-photo");
+        // Fetch the product excluding the photo field
+        const singleProduct = await ProductModel.findOne({ slug: slug }).select("-photo");
+
+        if (!singleProduct) {
+            return resp.status(404).json({
+                success: false,
+                message: "Product not found",
+            });
+        }
 
         return resp.status(200).json({
             success: true,
-            singleProduct: singleProduct,
+            singleProduct,
         });
 
     } catch (error) {
@@ -89,7 +97,8 @@ export const GetSingleProductController = async (req, resp) => {
             error: error.message,
         });
     }
-}
+};
+
 
 export const DeleteProductController = async (req, resp) => {
     try {

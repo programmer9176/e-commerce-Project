@@ -4,13 +4,11 @@ import AdminMenu from './../../Components/Layout/AdminMenu';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Select } from 'antd'
+import { useParams } from 'react-router-dom';
 const { Option } = Select;
 
-
-
-const CreateProduct = () => {
-
-
+const UpdateProduct = () => {
+    const params = useParams()
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState("")
     const [photo, setPhoto] = useState("")
@@ -19,7 +17,35 @@ const CreateProduct = () => {
     const [price, setPrice] = useState("")
     const [quantity, setQuantity] = useState("")
     const [shipping, setShipping] = useState("")
+    const [id, setId] = useState("")
 
+    // get single product
+
+    const singleProduct = async () => {
+        try {
+            const { data } = await axios.get(`http://localhost:9000/single-product/${params.slug}`);
+            if (data.success) {
+
+                console.log(data.singleProduct);
+
+                const product = data.singleProduct;
+                setName(product.name);
+                setDescription(product.description);
+                setPrice(product.price);
+                setQuantity(product.quantity);
+                setCategory(product.category);
+                setShipping(product.shipping);
+                setId(product._id)
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching product:", error);
+        }
+    };
+
+
+    // get all categories
 
     const getAllCategories = async () => {
         try {
@@ -27,7 +53,6 @@ const CreateProduct = () => {
 
             if (data.success) {
                 setCategories(data.categories);
-                console.log(data.categories);
             } else {
                 toast.error(data.message);
             }
@@ -38,9 +63,10 @@ const CreateProduct = () => {
 
     useEffect(() => {
         getAllCategories();
+        singleProduct()
     }, []);
 
-    const handleProduct = async (e) => {
+    const UpdateProduct = async (e) => {
         e.preventDefault()
         try {
 
@@ -55,7 +81,24 @@ const CreateProduct = () => {
                 productData.append("photo", photo)
             }
 
-            const { data } = await axios.post("http://localhost:9000/create-product", productData);
+            const { data } = await axios.put(`http://localhost:9000/update-product/${id}`, productData);
+
+            if (data.success) {
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
+
+
+        } catch (error) {
+            toast.error("Something went wrong")
+        }
+    }
+
+    const DeleteProduct = async () => {
+        try {
+
+            const { data } = await axios.delete(`http://localhost:9000/delete-product/${id}`);
 
             if (data.success) {
                 toast.success(data.message)
@@ -81,9 +124,9 @@ const CreateProduct = () => {
                         </div>
                         <div className="col-md-9">
                             <div className='mb-3'>
-                                <Select size='large' showSearch placeholder="Select a Category" className='forrm-select w-75' onChange={(value) => setCategory(value)}>
+                                <Select size='large' showSearch placeholder="Select a Category" className='forrm-select w-75' value={category} onChange={(value) => setCategory(value)}>
                                     {categories.map((c) => {
-                                        return <Option key={c._id}>{c.name}</Option>
+                                        return <Option key={c._id} value={c._id}>{c.name}</Option>
                                     })}
                                 </Select>
                             </div>
@@ -96,7 +139,11 @@ const CreateProduct = () => {
                             </div>
 
                             <div className='w-75 text-center mb-3'>
-                                {photo ? <img src={URL.createObjectURL(photo)} alt={photo.name} height="200px" /> : ""}
+                                {photo ? <img src={URL.createObjectURL(photo)} alt={photo.name} height="200px" /> : (
+                                    <>
+                                        <img src={`http://localhost:9000/product-photo/${id}`} alt="" height="200px" />
+                                    </>
+                                )}
                             </div>
 
                             <div className='w-75 mb-3'>
@@ -115,13 +162,15 @@ const CreateProduct = () => {
                                 <input type="number" placeholder='Quantity' className='form-control' value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                             </div>
 
-                            <Select showSearch placeholder="Shipping" className='forrm-select w-75 mb-3' size='large' onChange={(value) => setShipping(value)}>
+                            <Select showSearch placeholder="Shipping" className='forrm-select w-75 mb-3' size='large' onChange={(value) => setShipping(value)} value={shipping ? "Yes" : "No"}>
                                 <Option value="0">No</Option>
                                 <Option value="1">Yes</Option>
                             </Select>
 
                             <div className='mb-5'>
-                                <button className='btn btn-secondary w-75' onClick={handleProduct}>Create Product</button>
+                                <button className='btn btn-secondary mx-2' onClick={UpdateProduct}>Update Product</button>
+
+                                <button className='btn btn-danger mx-2' onClick={DeleteProduct}>Delete Product</button>
                             </div>
 
                         </div>
@@ -132,4 +181,4 @@ const CreateProduct = () => {
     )
 }
 
-export default CreateProduct
+export default UpdateProduct
