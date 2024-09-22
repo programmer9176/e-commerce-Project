@@ -40,3 +40,24 @@
   background-color: white;
   color: black;
 }
+
+.card-box {
+  text-decoration: none;
+  color: black;
+}
+
+.card-box:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.product-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-title {
+  font-size: 20px;
+}

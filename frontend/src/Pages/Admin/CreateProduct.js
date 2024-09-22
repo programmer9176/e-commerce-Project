@@ -4,6 +4,7 @@ import AdminMenu from './../../Components/Layout/AdminMenu';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Select } from 'antd'
+import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 
 
@@ -19,6 +20,7 @@ const CreateProduct = () => {
     const [price, setPrice] = useState("")
     const [quantity, setQuantity] = useState("")
     const [shipping, setShipping] = useState("")
+    const navigate = useNavigate()
 
 
     const getAllCategories = async () => {
@@ -59,8 +61,10 @@ const CreateProduct = () => {
 
             if (data.success) {
                 toast.success(data.message)
+                navigate("/dashboard/admin/products")
             } else {
                 toast.error(data.message)
+
             }
 
 

@@ -180,3 +180,29 @@ export const ProductPhotoController = async (req, resp) => {
         });
     }
 }
+
+export const filterController = async (req, resp) => {
+    try {
+        const { checked, radio } = req.body
+
+        let args = {}
+
+        if (checked.length > 0) args.category = checked;
+
+        if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] }
+
+        const filterProducts = await ProductModel.find(args);
+
+        resp.send({
+            success: true,
+            filterProducts
+        })
+
+    } catch (error) {
+        return resp.status(500).json({
+            success: false,
+            message: "Something went wrong in filter",
+            error: error.message,
+        });
+    }
+}

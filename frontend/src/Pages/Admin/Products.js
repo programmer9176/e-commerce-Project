@@ -24,26 +24,30 @@ const Products = () => {
 
     return (
         <Layout>
-            <h1 className='text-center'>All Product list</h1>
+            <h1 className='text-center my-4'>All Product list</h1>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-3">
                         <AdminMenu />
                     </div>
                     <div className="col-lg-9">
-                        {products.map((p) => (
-                            <Link to={`/dashboard/admin/update-product/${p.slug}`}>
-                                <div className="card" key={p._id} style={{ width: "18rem" }}>
-                                    <div className="card-img">
-                                        <img src={`http://localhost:9000/product-photo/${p._id}`} alt="" />
-                                    </div>
-                                    <div className="card-body">
-                                        <h3 className="card-title">{p.name}</h3>
-                                        <p>{p.description}</p>
-                                    </div>
+                        <div class="row">
+                            {products.map((p) => (
+                                <div class="col-md-4 mb-4">
+                                    <Link className='card-box' to={`/dashboard/admin/update-product/${p.slug}`}>
+                                        <div className="card" key={p._id}>
+                                            <div className="card-img">
+                                                <img className='img img-fluid' src={`http://localhost:9000/product-photo/${p._id}`} alt="" />
+                                            </div>
+                                            <div className="card-body">
+                                                <h3 className="card-title product-title">{p.name}</h3>
+                                                <p className='product-description'>{p.description}</p>
+                                            </div>
+                                        </div>
+                                    </Link>
                                 </div>
-                            </Link>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
